@@ -336,6 +336,8 @@ const galleries = {
 
     quiz1: [
         "Portfolio/Quiz 1 - Midterm.jpg",
+        "Portfolio/Quiz 1 - Midterm-2.jpg",
+        "Portfolio/Quiz 1 - Midterm-3.jpg"
     ],
 
     quiz2: [
@@ -395,22 +397,48 @@ function switchPage(id, el){
 let gallery = [];
 let index = 0;
 
+const modal = document.getElementById('modal');
+const modalImage = document.getElementById('modalImage');
+const prevBtn = document.querySelector('.prev');
+const nextBtn = document.querySelector('.next');
+
 function openGallery(name){
+
+    if(!galleries[name]){
+        alert("Gallery not found.");
+        return;
+    }
 
     gallery = galleries[name];
     index = 0;
 
-    document.getElementById('modal').style.display = 'block';
+    modal.style.display = 'block';
+
+    if(gallery.length <= 1){
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    } else {
+        prevBtn.style.display = 'block';
+        nextBtn.style.display = 'block';
+    }
 
     showImage();
 }
 
 function showImage(){
 
-    document.getElementById('modalImage').src = gallery[index];
+    if(!gallery.length) return;
+
+    modalImage.src = gallery[index];
+
+    modalImage.onerror = function(){
+        this.src = "https://via.placeholder.com/800x500?text=Image+Not+Found";
+    };
 }
 
 function changeSlide(step){
+
+    if(gallery.length <= 1) return;
 
     index += step;
 
@@ -427,16 +455,14 @@ function changeSlide(step){
 
 function closeModal(){
 
-    document.getElementById('modal').style.display = 'none';
+    modal.style.display = 'none';
 }
 
 /* =========================
    KEYBOARD CONTROL
 ========================= */
 
-document.addEventListener("keydown", e => {
-
-    const modal = document.getElementById('modal');
+document.addEventListener("keydown", function(e){
 
     if(modal.style.display === "block"){
 
@@ -458,12 +484,12 @@ document.addEventListener("keydown", e => {
    CLICK OUTSIDE MODAL
 ========================= */
 
-window.onclick = e => {
+window.addEventListener("click", function(e){
 
-    if(e.target.id === "modal"){
+    if(e.target === modal){
         closeModal();
     }
-};
+});
 
 </script>
 
